@@ -63,14 +63,75 @@ def new_user():
 
     ch = int(input())
 
-    if ch == '1':
+    if ch == 1:
         create_new_user()
     else:
         print("Thank You for Visiting Us!!")
 
 def create_new_user():
 
+    user = []
+
+    name = input("Enter your User Name")
+    email = input("Enter your Email Address")
+    age = int(input("Enter your Age"))
+    address = input("Enter your address")
+    starting_balance = int(input("Enter your starting balance(it should be greater than or equal to 5000):"))
+
+    if starting_balance >= 5000:
+        pass
+    else:
+        print("You cannot have starting balance less than Rs. 5000")
+        starting_balance = int(input("Enter again:"))
+
+    phone_number = input("Enter your Phone Number")
+    dob = input("Enter your Date of Birth in DD-MM-YYYY format")
+
+    user.append(name)
+    user.append(email)
+    user.append(starting_balance)
+    user.append(address)
+    user.append(age)
+    user.append(phone_number)
+    user.append(dob)
+
+    make_db_entry_for_new_user(user)
+
+def make_db_entry_for_new_user(details):
+
+    sql = f"INSERT INTO users(name, email, current_balance, address, age, phone_number, DOB) VALUES('{details[0]}','{details[1]}','{details[2]}','{details[3]}','{details[4]}','{details[5]}','{details[6]}')"
+
+    cursor.execute(sql)
+    db.commit()
 
 def existing_user():
-    pass
 
+    print("Welcome to Bhanja's Bank once again, dear customer!")
+    print("We see that you are one of our existing customers ! Isnt it(enter your choice to let us know)?")
+
+    answer = input()
+
+    if answer == 'Yes' or answer=="YES":
+
+        x = get_existing_customer_values()
+
+        for details in x:
+
+            print("Name : " + details[1])
+            print("Email : " + )
+    else:
+        print("Perhaps you are in the wrong place . Thanks for visiting us !")
+
+
+def get_existing_customer_values():
+
+    name = input("Enter your registered name:")
+
+    sql = f"SELECT * FROM users WHERE name='{name}'"
+
+    cursor.execute(sql)
+    db.commit()
+
+    return cursor.fetchall()
+
+existing_user()
