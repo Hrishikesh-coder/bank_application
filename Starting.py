@@ -59,14 +59,28 @@ def new_user():
 
     print("Welcome to Bhanja's Bank ! We hope that both of us have a memorable experience working together!")
 
-    print("Do you want to start a new account ? Press 1 for yes and 0 for no")
+    print("Do you want to start a new account ? Enter yes or no")
 
-    ch = int(input())
+    ch = input()
 
-    if ch == 1:
+    if 'y' in ch or 'Y' in ch:
         create_new_user()
+    elif 'n' in ch or 'N' in ch:
+        print("Do you want to exit ?")
+        inp = input()
+
+        if 'y' in inp or 'Y' in inp:
+            exit(0)
+
+        elif 'n' in inp or 'N' in inp:
+            print("We are redirecting you to our home screen")
+            starting()
+
+        else:
+            print("INVALID CHOICE ENTERED")
+
     else:
-        print("Thank You for Visiting Us!!")
+        print("INVALD")
 
 def create_new_user():
 
@@ -155,11 +169,11 @@ def existing_user():
 
                     elif option == '2':
 
-                        withdraw_money()
+                        withdraw_money(details[1])
 
                     elif option == '3':
 
-                        deposit_money()
+                        deposit_money(details[1])
 
                     else:
                         print("Invalid choice entered !")
@@ -199,6 +213,46 @@ def change_account_details(name):
 
     return "Succesfully Made the changes"
 
-def wit
+def withdraw_money(name):
+    sql = f"SELECT * FROM users WHERE name='{name}'"
+    cursor.execute(sql)
+
+    x = cursor.fetchall()
+
+    current_balance = x[0][3]
+
+    amount = int(input("Enter the amount to withdraw :"))
+
+    if int(current_balance) > 0:
+
+        new_balance = int(current_balance) - amount
+
+        sql = f"UPDATE users SET current_balance ='{new_balance}' WHERE name='{name}'"
+        cursor.execute(sql)
+        db.commit()
+
+        print("Successfully Withdrawed the money")
+
+    else:
+        print("Amount cannot be withdrawn! Current Balance is Rs. 0")
+
+
+def deposit_money(name):
+    sql = f"SELECT * FROM users WHERE name='{name}'"
+    cursor.execute(sql)
+
+    x = cursor.fetchall()
+
+    current_balance = x[0][3]
+
+    amount = int(input("Enter the amount to deposit :"))
+
+    new_balance = int(current_balance) + amount
+
+    sql = f"UPDATE users SET current_balance ='{new_balance}' WHERE name='{name}'"
+    cursor.execute(sql)
+    db.commit()
+
+    print("Successfully Deposited the money")
 
 starting()
