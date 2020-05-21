@@ -80,7 +80,7 @@ def new_user():
             print("INVALID CHOICE ENTERED")
 
     else:
-        print("INVALD")
+        print("INVALID CHOICE ENTERED")
 
 def create_new_user():
 
@@ -129,9 +129,12 @@ def existing_user():
 
     answer = input()
 
-    if answer == 'Yes' or answer=="YES":
+    if 'Y' in answer or 'y' in answer:
 
         x = get_existing_customer_values()
+
+
+
 
         for details in x:
 
@@ -154,11 +157,11 @@ def existing_user():
 
                 if a == "Yes" or a == "YES":
                     print('''
-                    WHAT ACTION DO YOU WANT TO PERFORM ? SELECT FROM THE BELOW OPTIONS:
-                    1.CHANGE ACCOUNT DETAILS
-                    2.WITHDRAW MONEY
-                    3.DEPOSIT MONEY
-                    ''')
+                        WHAT ACTION DO YOU WANT TO PERFORM ? SELECT FROM THE BELOW OPTIONS:
+                        1.CHANGE ACCOUNT DETAILS
+                        2.WITHDRAW MONEY
+                        3.DEPOSIT MONEY
+                        ''')
 
                     option = input("Enter your choice :")
 
@@ -180,11 +183,10 @@ def existing_user():
 
                 else:
                     print("Thank You for visiting us ! Bye !")
-            else:
-                print("Looks like your account does not exist ! Please create your account !")
-                create_new_user()
-    else:
-        print("Perhaps you are in the wrong place . Thanks for visiting us !")
+
+    elif 'n' in answer or 'N' in answer:
+            print("Perhaps you are in the wrong place . We are redirecting you to the home screen")
+            starting()
 
 
 def get_existing_customer_values():
@@ -196,6 +198,13 @@ def get_existing_customer_values():
     cursor.execute(sql)
     db.commit()
 
+
+    if len(cursor.fetchall()) == 0:
+
+        print("You do not have an account ! Create one !")
+
+        create_new_user()
+        
     return cursor.fetchall()
 
 def change_account_details(name):
@@ -232,9 +241,11 @@ def withdraw_money(name):
         db.commit()
 
         print("Successfully Withdrawed the money")
+        starting()
 
     else:
         print("Amount cannot be withdrawn! Current Balance is Rs. 0")
+        starting()
 
 
 def deposit_money(name):
@@ -254,5 +265,7 @@ def deposit_money(name):
     db.commit()
 
     print("Successfully Deposited the money")
+
+    starting()
 
 starting()
