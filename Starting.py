@@ -118,7 +118,22 @@ def existing_user():
         for details in x:
 
             print("Name : " + details[1])
-            print("Email : " + )
+            print("Email : " + details[2])
+            print("Current Balance : " + str(details[3]))
+            print("Address : " + details[4])
+            print("Age : " + str(details[5]))
+            print("Phone Number : " + details[6])
+            print("Date of Birth : " + details[7])
+
+            print("Are the details given above correct ?(Answer in Yes or No)")
+
+            ans = input()
+
+            if ans == "Yes":
+                print("Thats great")
+            else:
+                print("Looks like your account does not exist ! Please create your account !")
+                create_new_user()
     else:
         print("Perhaps you are in the wrong place . Thanks for visiting us !")
 
