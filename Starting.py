@@ -97,6 +97,10 @@ def create_new_user():
 
     make_db_entry_for_new_user(user)
 
+    print("Your Account has been Successfully Created ! Now try logging in !")
+
+    existing_user()
+
 def make_db_entry_for_new_user(details):
 
     sql = f"INSERT INTO users(name, email, current_balance, address, age, phone_number, DOB) VALUES('{details[0]}','{details[1]}','{details[2]}','{details[3]}','{details[4]}','{details[5]}','{details[6]}')"
@@ -131,6 +135,37 @@ def existing_user():
 
             if ans == "Yes":
                 print("Thats great")
+                print("Do you want to perform some action on your account ?")
+                a = input()
+
+                if a == "Yes" or a == "YES":
+                    print('''
+                    WHAT ACTION DO YOU WANT TO PERFORM ? SELECT FROM THE BELOW OPTIONS:
+                    1.CHANGE ACCOUNT DETAILS
+                    2.WITHDRAW MONEY
+                    3.DEPOSIT MONEY
+                    ''')
+
+                    option = input("Enter your choice :")
+
+                    if option == '1':
+
+                        status = change_account_details(details[1])
+                        print(status)
+
+                    elif option == '2':
+
+                        withdraw_money()
+
+                    elif option == '3':
+
+                        deposit_money()
+
+                    else:
+                        print("Invalid choice entered !")
+
+                else:
+                    print("Thank You for visiting us ! Bye !")
             else:
                 print("Looks like your account does not exist ! Please create your account !")
                 create_new_user()
@@ -149,4 +184,21 @@ def get_existing_customer_values():
 
     return cursor.fetchall()
 
-existing_user()
+def change_account_details(name):
+
+    sql = f"SELECT * FROM users WHERE name='{name}'"
+    cursor.execute(sql)
+
+    detail_to_change = input("Enter what should be changed : ")
+    new_value = input("Enter the new value : ")
+
+    if cursor.fetchone():
+        sql = f"UPDATE users SET '{detail_to_change}' ='{new_value}' WHERE name='{name}'"
+        cursor.execute(sql)
+        db.commit()
+
+    return "Succesfully Made the changes"
+
+def wit
+
+starting()
