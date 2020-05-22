@@ -1,26 +1,12 @@
-from tkinter import *
+
+#Bank Management Application built using SQLite3
+
 import sqlite3
-import os
-from tkinter.font import Font
 
 db = sqlite3.connect(f'user_details_database.db')
 cursor = db.cursor()
 
-def home():
 
-    root = Tk()
-    root.state("zoomed")
-    root.configure(background="#ECE5DD")
-
-    fontFamily = StringVar(value="Verdana")
-    fontSize = IntVar(value=20)
-
-    appfont = Font(family=fontFamily.get(), size=fontSize.get(), weight='bold')
-
-    Label(root,text="WELCOME TO BHANJA BANK!", bg="#ECE5DD", font=appfont).place(relx=0.35,rely=0.025)
-
-    Label(root,text="GOOD TO SEE YOU HERE !", bg="#ECE5DD")
-    root.mainloop()
 
 def create_table():
     sql = f'''
@@ -133,56 +119,65 @@ def existing_user():
 
         x = get_existing_customer_values()
 
+        if len(x) == 0:
 
+            print("You do not have an account !! Create one now !")
 
+            create_new_user()
 
-        for details in x:
+        else :
+            for details in x:
 
-            print("Name : " + details[1])
-            print("Email : " + details[2])
-            print("Current Balance : " + str(details[3]))
-            print("Address : " + details[4])
-            print("Age : " + str(details[5]))
-            print("Phone Number : " + details[6])
-            print("Date of Birth : " + details[7])
+                print("Name : " + details[1])
+                print("Email : " + details[2])
+                print("Current Balance : " + str(details[3]))
+                print("Address : " + details[4])
+                print("Age : " + str(details[5]))
+                print("Phone Number : " + details[6])
+                print("Date of Birth : " + details[7])
 
-            print("Are the details given above correct ?(Answer in Yes or No)")
+                print("Are the details given above correct ?(Answer in Yes or No)")
 
-            ans = input()
+                ans = input()
 
-            if ans == "Yes":
-                print("Thats great")
-                print("Do you want to perform some action on your account ?")
-                a = input()
+                if ans == "Yes":
+                    print("Thats great")
+                    print("Do you want to perform some action on your account ?")
+                    a = input()
 
-                if a == "Yes" or a == "YES":
-                    print('''
-                        WHAT ACTION DO YOU WANT TO PERFORM ? SELECT FROM THE BELOW OPTIONS:
-                        1.CHANGE ACCOUNT DETAILS
-                        2.WITHDRAW MONEY
-                        3.DEPOSIT MONEY
-                        ''')
+                    if a == "Yes" or a == "YES":
+                        print('''
+                            WHAT ACTION DO YOU WANT TO PERFORM ? SELECT FROM THE BELOW OPTIONS:
+                            1.CHANGE ACCOUNT DETAILS
+                            2.WITHDRAW MONEY
+                            3.DEPOSIT MONEY
+                            4.DELETE YOUR ACCOUNT
+                            ''')
 
-                    option = input("Enter your choice :")
+                        option = input("Enter your choice :")
 
-                    if option == '1':
+                        if option == '1':
 
-                        status = change_account_details(details[1])
-                        print(status)
+                            status = change_account_details(details[1])
+                            print(status)
 
-                    elif option == '2':
+                        elif option == '2':
 
-                        withdraw_money(details[1])
+                            withdraw_money(details[1])
 
-                    elif option == '3':
+                        elif option == '3':
 
-                        deposit_money(details[1])
+                            deposit_money(details[1])
+
+                        elif option == '4':
+
+                            delete_account(details[1])
+
+                        else:
+                            print("Invalid choice entered !")
 
                     else:
-                        print("Invalid choice entered !")
-
-                else:
-                    print("Thank You for visiting us ! Bye !")
+                        print("Thank You for visiting us ! Bye !")
 
     elif 'n' in answer or 'N' in answer:
             print("Perhaps you are in the wrong place . We are redirecting you to the home screen")
@@ -199,12 +194,7 @@ def get_existing_customer_values():
     db.commit()
 
 
-    if len(cursor.fetchall()) == 0:
 
-        print("You do not have an account ! Create one !")
-
-        create_new_user()
-        
     return cursor.fetchall()
 
 def change_account_details(name):
@@ -267,5 +257,12 @@ def deposit_money(name):
     print("Successfully Deposited the money")
 
     starting()
+
+def delete_account(name):
+
+    sql = f"DELETE FROM users WHERE name='{name}'"
+
+    cursor.execute(sql)
+    db.commit()
 
 starting()
